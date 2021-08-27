@@ -27,7 +27,7 @@
         </div>
         <br>
         <div class="text-center">
-            <button type="submit" class="btn btn-primary">@lang('messages.Next')</button>
+            <button type="submit" class="btn btn-primary">@lang('messages.DemoTitle')</button>
         </div>
     </form>
 @endsection
