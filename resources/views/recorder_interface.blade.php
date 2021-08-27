@@ -113,7 +113,7 @@
                             <div class="tab-pane active" id="instructions">
                                 <div class="card-text">
                                     <div>Please use the following link to go to Zoom:</div>
-                                    <div><a href="{{$zoom}}">{{$zoom}}</a></div>
+                                    <div><a href="{{$zoom}}" target="_blank">{{$zoom}}</a></div>
                                 </div>
                             </div>
                         </div>
@@ -140,13 +140,6 @@
                         <div class="text-center">@lang('messages.RecorderPlaybackSubmitLabel')</div>
                         <canvas id="wavedisplay" width="1000" height="150"></canvas>
                         <div id="audioplayer"></div>
-                        {{--                        <button id="save" type="button" class="btn btn-primary" onclick="startSubmit(this);" disabled>--}}
-                        {{--                            --}}{{-- <img src="{{ asset('images/save.svg') }}" width="75" height="75"> --}}
-                        {{--                            <i class="fas fa-upload"></i> @lang('messages.RecorderSave')--}}
-                        {{--                        </button>--}}
-                        {{--                        <div id="recwarning">--}}
-                        {{--                            <div style="color: red;">@lang('messages.RecorderNotYet')</div>--}}
-                        {{--                        </div>--}}
                     </div>
                 </div>
             </div>
