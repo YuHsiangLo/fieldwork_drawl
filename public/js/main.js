@@ -20,7 +20,11 @@ var audioContext;
 var audioInput;
 var realAudioInput;
 var inputPoint;
-var audioRecorder;
+var audioRecorder1;
+var audioRecorder2;
+var audioRecorder3;
+var audioRecorder4;
+var audioRecorder5;
 var rafID;
 var analyserContext = null;
 var zeroGain;
@@ -31,7 +35,7 @@ var tempblob;
 var blocksubmit = 1;
 var recording = false;
 
-function gotBuffers(buffers) {
+function gotBuffers(buffers, recorder) {
     var canvas = document.getElementById("wavedisplay");
 
     drawBuffer( canvas.width, canvas.height, canvas.getContext('2d'), buffers[0] );
@@ -40,13 +44,16 @@ function gotBuffers(buffers) {
     // so here's where we should set up the download.
     if(encoding === 'mp3') {
         console.log('Encoding as MP3');
-        audioRecorder.exportMP3(doneEncoding);
+        recorder.exportMP3(doneEncoding);
+        //audioRecorder.exportMP3(doneEncoding);
     } else if (encoding === 'monowav') {
         console.log('Encoding as Mono WAV');
-        audioRecorder.exportMonoWAV(doneEncoding);
+        recorder.exportMonoWAV(doneEncoding);
+        //audioRecorder.exportMonoWAV(doneEncoding);
     } else {
         console.log('Encoding as WAV');
-        audioRecorder.exportWAV(doneEncoding);
+        recorder.exportWAV(doneEncoding);
+        //audioRecorder.exportWAV(doneEncoding);
     }
 }
 
@@ -63,9 +70,9 @@ function doneEncoding(blob) {
     var audioPlayer = document.getElementById('audioplayer')
     audioPlayer.appendChild(currentAudio);
 
-    var submitbutton = document.getElementById('save');
-    submitbutton.style.opacity = "1";
-    submitbutton.disabled = false;
+    //var submitbutton = document.getElementById('save');
+    //submitbutton.style.opacity = "1";
+    //submitbutton.disabled = false;
 
     blocksubmit = 0;
     // $("audio#recorded-audio").attr("src", url);
@@ -75,11 +82,26 @@ function doneEncoding(blob) {
     EndProgressAnimation();
     console.log('doneEncoding finished');
 
-    submitbutton.click();
+    var recordButton = document.getElementById('recordButton');
+    Recorder.setupPhpPost(tempblob, function(progress) {
+        var progresstext = document.getElementById('progresstext');
+        if (progress.startsWith(Lang.get('messages.RecorderUploadErrorPrefix'))) {
+            recordButton.style.opacity = '1';
+            recordButton.disabled = false;
+            var progressimage = document.getElementById('progressimage');
+            progresstext.innerHTML = progress;
+            progressimage.innerHTML = '<img id="progressimg" src="/images/error.png" alt="Error!"/>'
+            $('#status-footer').removeClass('invisible');
+        } else if (progress === 'ended') {
+            blocksubmit = 1;
+        }
+    });
+
+    //if (recordButton.classList.contains('automatic')) {}
 }
 
 function startSubmit() {
-    if (blocksubmit == 0) {
+    if (blocksubmit === 0) {
         //if (confirm(Lang.get('messages.RecorderSubmitConfirm')) == false) {
         //    return false;
         //}
@@ -88,6 +110,7 @@ function startSubmit() {
         //progressimage.innerHTML = '<img id="progressimg" src="/images/please_wait.gif" alt="Loading.."/>';
         //ShowProgressAnimation(Lang.get('messages.RecorderSubmitBegin'));
         Recorder.setupPhpPost(tempblob, function(progress) {
+            var recordButton = document.getElementById('recordButton');
             var progresstext = document.getElementById('progresstext');
             if (progress.startsWith(Lang.get('messages.RecorderUploadErrorPrefix'))) {
                 recordButton.style.opacity = '1';
@@ -97,29 +120,25 @@ function startSubmit() {
                 progressimage.innerHTML = '<img id="progressimg" src="/images/error.png" alt="Error!"/>'
                 $('#status-footer').removeClass('invisible');
             } else if (progress === 'ended') {
-                recordButton.style.opacity = '1';
-                recordButton.disabled = false;
                 //var progressimage = document.getElementById('progressimage');
                 //progresstext.innerHTML = Lang.get('messages.RecorderUploadSuccessful') + "<br/><br/>" + Lang.get('messages.RecorderUploadThankYou');
-                var recwarning = document.getElementById('recwarning');
-                recwarning.innerHTML = '';
+                //var recwarning = document.getElementById('recwarning');
+                //recwarning.innerHTML = '';
                 //progressimage.innerHTML = '<img id="progressimg" src="/images/success.gif" alt="Success!"/>'
                 //$('#status-footer').removeClass('invisible');
                 blocksubmit = 1;
-                var savebutton = document.getElementById('save');
-                savebutton.style.opacity = '0.25';
-                savebutton.disabled = true;
+                //var savebutton = document.getElementById('save');
+                //savebutton.style.opacity = '0.25';
+                //savebutton.disabled = true;
 
                 if (recordButton.classList.contains('automatic')) {
-                    recordButton.click();
+                    //recordButton.click();
                     recordButton.classList.remove('automatic');
                 } else {
+                    recordButton.style.opacity = '1';
+                    recordButton.disabled = false;
                     recordButton.classList.remove('automatic');
                 }
-
-                //if (automatic) {
-
-                //}
             }
             //recordButton.style.opacity = '0.25';
             //recordButton.disabled = true;
@@ -128,15 +147,91 @@ function startSubmit() {
     }
 }
 
+function continueRecording(element) {
+    if (element.classList.contains('r1')) {
+        element.classList.remove('r1');
+        element.classList.add('r2');
+
+        audioRecorder1.stop();
+        audioRecorder2.clear();
+        audioRecorder2.record();
+
+	// have a timeout here is start recorder 2 before recorder 1 ends
+	// join audio files post-hoc
+
+        audioRecorder1.getBuffers(buffer => gotBuffers(buffer, audioRecorder1));
+
+    } else if (element.classList.contains('r2')) {
+        element.classList.remove('r2');
+        element.classList.add('r3');
+
+        audioRecorder2.stop();
+        audioRecorder3.clear();
+        audioRecorder3.record();
+
+        audioRecorder2.getBuffers(buffer => gotBuffers(buffer, audioRecorder2));
+
+    } else if (element.classList.contains('r3')) {
+        element.classList.remove('r3');
+        element.classList.add('r4');
+
+        audioRecorder3.stop();
+        audioRecorder4.clear();
+        audioRecorder4.record();
+
+        audioRecorder3.getBuffers(buffer => gotBuffers(buffer, audioRecorder3));
+
+    } else if (element.classList.contains('r4')) {
+        element.classList.remove('r4');
+        element.classList.add('r5');
+
+        audioRecorder4.stop();
+        audioRecorder5.clear();
+        audioRecorder5.record();
+
+        audioRecorder4.getBuffers(buffer => gotBuffers(buffer, audioRecorder4));
+
+    } else if (element.classList.contains('r5')) {
+        element.classList.remove('r5');
+        element.classList.add('r1');
+
+        audioRecorder5.stop();
+        audioRecorder1.clear();
+        audioRecorder1.record();
+
+        audioRecorder5.getBuffers(buffer => gotBuffers(buffer, audioRecorder5));
+    }
+}
+
 function toggleRecording(e) {
-    if (e.classList.contains("recording")) {
+    if (e.classList.contains('recording')) {
         // stop recording
-        audioRecorder.stop();
+        if (e.classList.contains('r1')) {
+            audioRecorder1.stop();
+            audioRecorder1.getBuffers(buffer => gotBuffers(buffer, audioRecorder1));
+            e.classList.remove('r1');
+        } else if (e.classList.contains('r2')) {
+            audioRecorder2.stop();
+            audioRecorder2.getBuffers(buffer => gotBuffers(buffer, audioRecorder2));
+            e.classList.remove('r2');
+        } else if (e.classList.contains('r3')) {
+            audioRecorder3.stop();
+            audioRecorder3.getBuffers(buffer => gotBuffers(buffer, audioRecorder3));
+            e.classList.remove('r3');
+        } else if (e.classList.contains('r4')) {
+            audioRecorder4.stop();
+            audioRecorder4.getBuffers(buffer => gotBuffers(buffer, audioRecorder4));
+            e.classList.remove('r4');
+        } else if (e.classList.contains('r5')) {
+            audioRecorder5.stop();
+            audioRecorder5.getBuffers(buffer => gotBuffers(buffer, audioRecorder5));
+            e.classList.remove('r5');
+        }
         // audioContext.close();
         // gumStream.getAudioTracks()[0].stop();
         recording = false;
-        e.classList.remove("recording");
-        audioRecorder.getBuffers(gotBuffers);
+        e.classList.remove('recording');
+        // audioRecorder.getBuffers(gotBuffers);
         $("#rectext").text(Lang.get('messages.RecorderRec'));
         $("#recordButton").removeClass("btn-danger");
         $("#recordButton").addClass("btn-secondary");
@@ -148,7 +243,7 @@ function toggleRecording(e) {
         var currentAudio = document.getElementById('recorded-audio');
 
         // if there is an audio, force stop
-        if (!currentAudio == null) {currentAudio.pause();}
+        if (currentAudio) {currentAudio.pause();}
 
         // remove the audio
         audioPlayer.innerHTML = '';
@@ -158,17 +253,18 @@ function toggleRecording(e) {
         var context = canvas.getContext('2d');
         context.clearRect(0, 0, canvas.width, canvas.height);
 
-        var savebutton = document.getElementById('save');
-        savebutton.style.opacity = '0.25';
-        savebutton.disabled = true;
+        //var savebutton = document.getElementById('save');
+        //savebutton.style.opacity = '0.25';
+        //savebutton.disabled = true;
 
         var progresstext = document.getElementById('progresstext');
         progresstext.innerHTML = '';
 
-        e.classList.add("recording");
+        e.classList.add('recording');
+        e.classList.add('r1');
+        audioRecorder1.clear();
+        audioRecorder1.record();
 
-        audioRecorder.clear();
-        audioRecorder.record();
         recording = true;
 
         $("#rectext").text(Lang.get('messages.RecorderStop'));
@@ -177,7 +273,7 @@ function toggleRecording(e) {
     }
 }
 
-function convertToMono( input ) {
+function convertToMono(input) {
     var splitter = audioContext.createChannelSplitter(2);
     var merger = audioContext.createChannelMerger(2);
 
@@ -251,6 +347,7 @@ function toggleMono() {
 }
 
 function gotStream(stream, locale) {
+    console.log(stream)
     Lang.setLocale(locale);
     audioContext = new AudioContext();
     inputPoint = audioContext.createGain();
@@ -262,7 +359,11 @@ function gotStream(stream, locale) {
     analyserNode.fftSize = 2048;
     inputPoint.connect(analyserNode);
 
-    audioRecorder = new Recorder(inputPoint, {numChannels: 1});
+    audioRecorder1 = new Recorder(inputPoint, {numChannels: 1});
+    audioRecorder2 = new Recorder(inputPoint, {numChannels: 1});
+    audioRecorder3 = new Recorder(inputPoint, {numChannels: 1});
+    audioRecorder4 = new Recorder(inputPoint, {numChannels: 1});
+    audioRecorder5 = new Recorder(inputPoint, {numChannels: 1});
 
     zeroGain = audioContext.createGain();
     zeroGain.gain.value = 0.0;
@@ -333,11 +434,11 @@ function initAudio(locale) {
     }
 
     navigator.mediaDevices.getUserMedia({'audio': true, 'video': false})
-    .then(function(stream) {
+        .then(function(stream) {
             return gotStream(stream, locale);
-    })
-    .catch(function(e) {
+        })
+        .catch(function(e) {
             alert('Error getting audio');
             console.log(e);
-    });
+        });
 }

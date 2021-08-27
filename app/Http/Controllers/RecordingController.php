@@ -14,7 +14,7 @@ use Exception;
 
 class RecordingController extends Controller
 {
-    public function get_query(Request $request)
+    public function create(Request $request)
     {
         $date = $request->query('date');
         $elicitor = $request->query('elicitor');
@@ -66,11 +66,11 @@ class RecordingController extends Controller
     /**
      * Create a new recorder instance so that user can submit
      */
-    public function create()
-    {
-        return view('recorder',
-            [ 'locale' => \App::getLocale() ]);
-    }
+    //public function create()
+    //{
+    //    return view('recorder',
+    //        [ 'locale' => \App::getLocale() ]);
+    //}
 
     /**
      * Save the user's recording
@@ -84,7 +84,7 @@ class RecordingController extends Controller
         Log::Info('About to upload recording.');
 
         // define variables and set to empty values
-        $user = $request->session()->get('user_id');
+        //$user = $request->session()->get('user_id');
 
         if (!isset($request['audio-filename']) && !isset($request['video-filename'])) {
             Log::Error('Empty file name');
@@ -183,24 +183,20 @@ class RecordingController extends Controller
 
         echo 'success';
 
-        //$testModel = FieldWorkRecording::create([
+        $testModel = FieldWorkRecording::create([
+            //'date' => $request->session()->get('record_date'),
+            'date' => rtrim($request['participant_folder'], '/'),
+            'elicitor' => $request->session()->get('elicitor'),
+            'consultant' => $request->session()->get('consultant'),
+            'recording_filename' => $request['audio-filename']
+        ]);
+
+        //$testModel = Recording::create([
         //    'date' => $request->session()->get('record_date'),
         //    'elicitor' => $request->session()->get('elicitor'),
         //    'consultant' => $request->session()->get('consultant'),
-        //    'recording_filename' => $fileName
+        //    'recording_filename' => 'a'//$fileName
         //]);
-
-        $testModel = FieldWorkRecording::create([
-            'date' => 'a',
-            'elicitor' => 'b',
-            'consultant' => 'c',
-            'recording_filename' => 'd'
-        ]);
-
-        $testModel = Recording::create([
-            'consent_form_id' => (int) $user,
-            'recording_filename' => 'a'//$fileName
-        ]);
 
     }
 

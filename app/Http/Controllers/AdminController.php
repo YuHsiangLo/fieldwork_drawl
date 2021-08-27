@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\FieldWorkRecording;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 use App\ConsentForm;
+use App\Recording;
 
 class AdminController extends Controller
 {
@@ -53,12 +55,21 @@ class AdminController extends Controller
             }
         }
 
-
-
+        $recordings = [];
+        foreach (FieldWorkRecording::all()->sortByDesc("created_at") as $recording) {
+            if ($recording->created_at > $weekbefore) {
+                $recording->has_demographic_questionnaire = true;
+                $recording->has_recording = true;
+                //if (app(\App\Recording::class)->where('consent_form_id',$consentForm->id)->get()->count() == 0) {
+                //    $consentForm->has_recording = false;
+                //}
+                $recordings[] = $recording;
+            }
+        }
 
         //Log::info("Consent forms content is " . json_encode($consentForms));
 
         return view('admin',
-            [ 'users' => $users, 'consent_forms' => $consentForms ]);
+            [ 'users' => $users, 'consent_forms' => $recordings ]);
     }
 }

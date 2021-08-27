@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use App\ConsentForm;
 use App\Recording;
 use App\Exports\ConsentFormsExport;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ConsentFormController extends Controller
@@ -55,16 +56,21 @@ class ConsentFormController extends Controller
     public function destroy($id)
     {
         if (Gate::allows('manage-data')) {
-            $consent_form = app(\App\ConsentForm::class)->find($id);
+            //$consent_form = app(\App\ConsentForm::class)->find($id);
+            $consent_form = app(\App\FieldWorkRecording::class)->find($id);
             if (is_null($consent_form)) {
                 // User could not be found
                 return back()->with('error', 'Delete failed - this submission could not be found!');
             };
-            if ((app(\App\DemographicQuestionnaire::class)->where('consent_form_id',$id)->get()->count() > 0 ) || (app(\App\Recording::class)->where('consent_form_id',$id)->get()->count() > 0 ))  {
-                return back()->with('error', 'This submission cannot be deleted - submission includes questionnaire and/or recording. View the submission details and delete the recording and/or questionnaire first.');
-            }
+
+            //if ((app(\App\DemographicQuestionnaire::class)->where('consent_form_id',$id)->get()->count() > 0 ) || (app(\App\Recording::class)->where('consent_form_id',$id)->get()->count() > 0 ))  {
+            //    return back()->with('error', 'This submission cannot be deleted - submission includes questionnaire and/or recording. View the submission details and delete the recording and/or questionnaire first.');
+            //}
+
+            Storage::delete('audio/' . $consent_form->date . '/' . $consent_form->recording_filename);
             $consent_form->delete();
-            return back()->with('status', 'Submission for ' . $consent_form->name . ' (ID: ' . $consent_form->id . ') has been successfully deleted!');
+            return back()->with('status', 'Recording ID ' . $consent_form->id . ' has been successfully deleted!');
+            //return back()->with('status', 'Submission for ' . $consent_form->name . ' (ID: ' . $consent_form->id . ') has been successfully deleted!');
         }
 
         return redirect('admin')->with('error', 'You are not currently authorized to manage submissions!');

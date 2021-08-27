@@ -173,22 +173,20 @@ DEALINGS IN THE SOFTWARE.
     }
 
     Recorder.setupPhpPost  = function(blob, callback){
-        var date = new Date();
-        var hour = date.getHours().toString();
-        var minute = date.getMinutes().toString();
-        var second = date.getSeconds().toString();
-        var timestamp = hour + '-' + minute + '-' + second;
+        const date_ = new Date();
+        const hour = date_.getHours().toString();
+        const minute = date_.getMinutes().toString();
+        const second = date_.getSeconds().toString();
+        const timestamp = hour + '-' + minute + '-' + second;
 
-        var fileext = ".wav";
-        if (blob.type == "audio/mpeg") {
+        let fileext = ".wav";
+        if (blob.type === "audio/mpeg") {
             fileext = ".mp3";
         }
         console.log('Setting up Php Post');
-        var filename = user_id + '_' + timestamp + fileext;
-        //var filename = 'test' + '_' + timestamp + fileext;
-        var formData = new FormData();
-        formData.append('participant_folder', user_id + '/');
-        //formData.append('participant_folder', 'test/');
+        const filename = consultant + '_' + timestamp + fileext;
+        const formData = new FormData();
+        formData.append('participant_folder', date + '/');
         formData.append('audio-filename', filename);
         formData.append('audio-blob', blob);
         makeXMLHttpRequest('/recordings', formData, function(progress) {
@@ -196,9 +194,7 @@ DEALINGS IN THE SOFTWARE.
                 callback(progress)
                 return;
             }
-
             callback('ended');
-
         });
         // var request = new XMLHttpRequest();
 
