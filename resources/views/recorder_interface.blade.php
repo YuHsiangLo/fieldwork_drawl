@@ -111,12 +111,10 @@
                     <div class="card-body limitsize">
                         <div class="tab-content mt-3">
                             <div class="tab-pane active" id="instructions">
-                                <p class="card-text">
-                                <div>Please use the following link to go to Zoom:</div>
-                                <div><a href="{{$zoom}}">{{$zoom}}</a></div>
-                                    {{$date}}
-{{--                                    @include('includes.'.$locale.".recorder_instructions")--}}
-                                </p>
+                                <div class="card-text">
+                                    <div>Please use the following link to go to Zoom:</div>
+                                    <div><a href="{{$zoom}}">{{$zoom}}</a></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -142,85 +140,87 @@
                         <div class="text-center">@lang('messages.RecorderPlaybackSubmitLabel')</div>
                         <canvas id="wavedisplay" width="1000" height="150"></canvas>
                         <div id="audioplayer"></div>
-{{--                        <button id="save" type="button" class="btn btn-primary" onclick="startSubmit(this);" disabled>--}}
-{{--                            --}}{{-- <img src="{{ asset('images/save.svg') }}" width="75" height="75"> --}}
-{{--                            <i class="fas fa-upload"></i> @lang('messages.RecorderSave')--}}
-{{--                        </button>--}}
-{{--                        <div id="recwarning">--}}
-{{--                            <div style="color: red;">@lang('messages.RecorderNotYet')</div>--}}
-{{--                        </div>--}}
+                        {{--                        <button id="save" type="button" class="btn btn-primary" onclick="startSubmit(this);" disabled>--}}
+                        {{--                            --}}{{-- <img src="{{ asset('images/save.svg') }}" width="75" height="75"> --}}
+                        {{--                            <i class="fas fa-upload"></i> @lang('messages.RecorderSave')--}}
+                        {{--                        </button>--}}
+                        {{--                        <div id="recwarning">--}}
+                        {{--                            <div style="color: red;">@lang('messages.RecorderNotYet')</div>--}}
+                        {{--                        </div>--}}
                     </div>
                 </div>
             </div>
-            @endsection
+        </div>
+    </div>
+@endsection
 
-            @section('after-body')
-                <script>
-                    const user_id = '{{$date}}' + '_' + '{{$consultant}}' + '_' + '{{$elicitor}}';
-                    const consultant = '{{$consultant}}';
-                    const date = '{{$date}}';
-                    const h1 = document.getElementById('rectime');
-                    const start = document.getElementById('recordButton');
-                    const reminder_audio = document.getElementById('reminder-audio');
-                    var recording_in_progress;
-                    var seconds = 0;
-                    var minutes = 0;
-                    var hours = 0;
-                    var t;
+@section('after-body')
+    <script>
+        const user_id = '{{$date}}' + '_' + '{{$consultant}}' + '_' + '{{$elicitor}}';
+        const consultant = '{{$consultant}}';
+        const date = '{{$date}}';
+        const h1 = document.getElementById('rectime');
+        const start = document.getElementById('recordButton');
+        const reminder_audio = document.getElementById('reminder-audio');
+        var recording_in_progress;
+        var seconds = 0;
+        var minutes = 0;
+        var hours = 0;
+        var t;
 
-                    function add() {
-                        t++;
-                        seconds++;
-                        if (seconds >= 60) {
-                            seconds = 0;
-                            minutes++;
-                            if (minutes >= 60) {
-                                minutes = 0;
-                                hours++;
-                            }
-                        }
+        function add() {
+            t++;
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }
 
-                        if (t % 600 === 0) {
-                            start.classList.add('automatic');
-                            continueRecording(start);
-                            //reminder_audio.play();
-                            h1.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
-                            timer();
-                        } else {
-                            h1.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
-                            timer();
-                        }
-                    }
+            if (t % 600 === 0) {
+                start.classList.add('automatic');
+                continueRecording(start);
+                //reminder_audio.play();
+                h1.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+                timer();
+            } else {
+                h1.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+                timer();
+            }
+        }
 
-                    function timer() {
-                        t = setTimeout(add, 1000);
-                    }
+        function timer() {
+            t = setTimeout(add, 1000);
+        }
 
-                    timer();
+        timer();
 
-                    window.onload=function() {
-                        clearTimeout(t);
-                        h1.textContent = "00:00:00";
-                        seconds = 0;
-                        minutes = 0;
-                        hours = 0;
-                        recording_in_progress = false;
-                    }
+        window.onload=function() {
+            clearTimeout(t);
+            h1.textContent = "00:00:00";
+            seconds = 0;
+            minutes = 0;
+            hours = 0;
+            recording_in_progress = false;
+        }
 
-                    start.onclick = () => {
-                        toggleRecording(start);
+        start.onclick = () => {
+            toggleRecording(start);
 
-                        if (recording_in_progress) {
-                            clearTimeout(t);
-                            h1.textContent = '00:00:00';
-                            seconds = 0;
-                            minutes = 0;
-                            hours = 0;
-                            recording_in_progress = false;
-                        } else {
-                            timer();
-                            recording_in_progress = true;
-                        }
-                    }
-                </script>
+            if (recording_in_progress) {
+                clearTimeout(t);
+                h1.textContent = '00:00:00';
+                seconds = 0;
+                minutes = 0;
+                hours = 0;
+                recording_in_progress = false;
+            } else {
+                timer();
+                recording_in_progress = true;
+            }
+        }
+    </script>
 @endsection
