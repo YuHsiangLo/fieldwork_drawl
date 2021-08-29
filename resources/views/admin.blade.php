@@ -70,33 +70,35 @@
                 @if (Auth::user()->authorized && Gate::allows('manage-data'))
                     <br/>
                     <div class="card">
-                        <div class="card-header">New Submissions (past 7 days)</div>
+                        <div class="card-header">Submissions</div>
                         <div class="card-body">
-                            @if ($consent_forms)
+                            @if (collect($consent_forms)->map(function ($item, $key) {return $item->elicitor === Auth::user()->name;})->reduce(function ($carry, $item) {return $carry + $item;}) > 0)
                                 <table style="width:100%">
                                     <tr><th>ID</th><th>Elicitor</th><th>Consultant</th><th>Date</th><th>Player</th><th>Actions</th></tr>
-                                    {{--                        <tr><th>ID</th><th>Name</th><th>Email</th><th>Date</th><th><i class="fas fa-clipboard-list" title="Was questionnaire received?"></i></th><th><i class="fas fa-microphone" title="Was recording received?"></i></th><th>Actions</th></tr>--}}
                                     @foreach ($consent_forms as $consent_form)
-                                        <tr><td>{{$consent_form->id}}</td><td>{{$consent_form->elicitor}}</td><td>{{$consent_form->consultant}}</td><td>{{$consent_form->created_at}}</td><td>
-                                                <audio controls preload="metadata" style="width:300px;">
-                                                    <source src="{{ Storage::url('audio/' . $consent_form->date . '/' . $consent_form->recording_filename) }}" type="audio/wav">
-                                                    Your browser does not support the audio element.
-                                                </audio>
-                                            </td>
-                                            <td>
-                                                <a href="{{ Storage::url('audio/' . $consent_form->date . '/' . $consent_form->recording_filename) }}" class="btn btn-info" title="Download"><i class="fas fa-download"></i></a>
-                                                <a href="{{ route ('consent_forms.destroy-get', $consent_form->id) }}" class="btn btn-info" title="Delete recording" onclick="return confirm('Are you sure you wish to delete this recording? This cannot be undone!')"><i class="fas fa-trash-alt"></i></a>
-                                            </td>
-                                        </tr>
-                                        {{--                            <tr><td>{{ $consent_form->id }}</td><td>{{ $consent_form->name }}</td><td>{{ $consent_form->email }}</td><td>{{ $consent_form->created_at }}</td><td>{!! $consent_form->has_demographic_questionnaire ? '<i class="far fa-check-square" title="Questionnaire Received"></i>' : '<i class="far fa-square" title="Questionnaire NOT Received"></i>' !!}</td><td>{!! $consent_form->has_recording ? '<i class="far fa-check-square" title="Recording Received"></i>' : '<i class="far fa-square" title="Recording NOT Received"></i> ' !!}</td><td><a href="{{ route ('consent_forms.show', $consent_form->id) }}" class="btn btn-info" title="View submission"><i class="fas fa-eye"></i></a> <a href="{{ route ('consent_forms.destroy-get', $consent_form->id) }}" class="btn btn-info" title="Delete submission" onclick="return confirm('Are you sure you wish to delete this submission? This cannot be undone!')"><i class="fas fa-trash-alt"></i></a></td></tr>--}}
+                                        @if(Auth::user()->name === $consent_form->elicitor)
+                                            <tr>
+                                                <td>
+                                                    {{$consent_form->id}}</td><td>{{$consent_form->elicitor}}</td><td>{{$consent_form->consultant}}</td><td>{{$consent_form->created_at}}</td><td>
+                                                    <audio controls preload="metadata" style="width:300px;">
+                                                        <source src="{{ Storage::url('audio/' . $consent_form->date . '/' . $consent_form->recording_filename) }}" type="audio/wav">
+                                                        Your browser does not support the audio element.
+                                                    </audio>
+                                                </td>
+                                                <td>
+                                                    <a href="{{ Storage::url('audio/' . $consent_form->date . '/' . $consent_form->recording_filename) }}" class="btn btn-info" title="Download"><i class="fas fa-download"></i></a>
+                                                    <a href="{{ route ('consent_forms.destroy-get', $consent_form->id) }}" class="btn btn-info" title="Delete recording" onclick="return confirm('Are you sure you wish to delete this recording? This cannot be undone!')"><i class="fas fa-trash-alt"></i></a>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 </table>
                             @else
                                 There have been no new submissions in the past week
                                 <br/>
                             @endif
-                            <br/>
-                            <a href="{{ route('consent_forms.index') }}">View All Submissions</a>
+{{--                            <br/>--}}
+{{--                            <a href="{{ route('consent_forms.index') }}">View All Submissions</a>--}}
                         </div>
                     </div>
                 @endif
