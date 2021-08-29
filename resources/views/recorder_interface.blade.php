@@ -200,8 +200,19 @@
             recording_in_progress = false;
         }
 
+        const beforeUnloadListener = (event) => {
+            event.preventDefault();
+            return event.returnValue = 'Please stop the recording before closing the page?';
+        };
+
         start.onclick = () => {
             toggleRecording(start);
+
+            if (start.classList.contains('recording')) {
+                addEventListener("beforeunload", beforeUnloadListener, {capture: true});
+            } else {
+                removeEventListener("beforeunload", beforeUnloadListener, {capture: true});
+            }
 
             if (recording_in_progress) {
                 clearTimeout(t);
