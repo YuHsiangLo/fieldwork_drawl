@@ -159,10 +159,10 @@
         var seconds = 0;
         var minutes = 0;
         var hours = 0;
-        var t;
+        var s;
 
         function add() {
-            t++;
+            s++;
             seconds++;
             if (seconds >= 60) {
                 seconds = 0;
@@ -173,16 +173,14 @@
                 }
             }
 
-            if (t % 600 === 0) {
+            if (s % 600 === 0) {
                 start.classList.add('automatic');
                 continueRecording(start);
                 //reminder_audio.play();
-                h1.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
-                timer();
-            } else {
-                h1.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
-                timer();
             }
+
+            h1.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+            timer();
         }
 
         function timer() {
@@ -191,9 +189,10 @@
 
         timer();
 
-        window.onload=function() {
+        window.onload = function() {
             clearTimeout(t);
             h1.textContent = "00:00:00";
+            s = 0;
             seconds = 0;
             minutes = 0;
             hours = 0;
@@ -201,6 +200,7 @@
         }
 
         const beforeUnloadListener = (event) => {
+            start.click();
             event.preventDefault();
             return event.returnValue = 'Please stop the recording before closing the page?';
         };
@@ -209,14 +209,15 @@
             toggleRecording(start);
 
             if (start.classList.contains('recording')) {
-                addEventListener("beforeunload", beforeUnloadListener, {capture: true});
+                addEventListener('beforeunload', beforeUnloadListener, {capture: true});
             } else {
-                removeEventListener("beforeunload", beforeUnloadListener, {capture: true});
+                removeEventListener('beforeunload', beforeUnloadListener, {capture: true});
             }
 
             if (recording_in_progress) {
                 clearTimeout(t);
                 h1.textContent = '00:00:00';
+                s = 0;
                 seconds = 0;
                 minutes = 0;
                 hours = 0;
