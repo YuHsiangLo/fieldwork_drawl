@@ -72,11 +72,11 @@
                     <div class="card">
                         <div class="card-header">Submissions</div>
                         <div class="card-body">
-                            @if (collect($consent_forms)->map(function ($item, $key) {return $item->elicitor === Auth::user()->name;})->reduce(function ($carry, $item) {return $carry + $item;}) > 0)
+                            @if (collect($consent_forms)->map(function ($item, $key) {return strpos(strtolower(Auth::user()->name), strtolower($item->elicitor)) !== false;})->reduce(function ($carry, $item) {return $carry + $item;}) > 0)
                                 <table style="width:100%">
                                     <tr><th>ID</th><th>Elicitor</th><th>Consultant</th><th>Date</th><th>Player</th><th>Actions</th></tr>
                                     @foreach ($consent_forms as $consent_form)
-                                        @if(Auth::user()->name === $consent_form->elicitor)
+                                        @if(strpos(strtolower(Auth::user()->name), strtolower($consent_form->elicitor)) !== false)
                                             <tr>
                                                 <td>
                                                     {{$consent_form->id}}</td><td>{{$consent_form->elicitor}}</td><td>{{$consent_form->consultant}}</td><td>{{$consent_form->created_at}}</td><td>
@@ -94,7 +94,7 @@
                                     @endforeach
                                 </table>
                             @else
-                                There have been no new submissions in the past week
+                                There have been no new submissions.
                                 <br/>
                             @endif
 {{--                            <br/>--}}
