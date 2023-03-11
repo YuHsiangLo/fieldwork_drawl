@@ -26,6 +26,12 @@
             <input type="text" id="zoom-link" name="zoom-link" class="form-control" required>
         </div>
         <br>
+        <div class="text-info text-center">
+            Note that all fields are required, and please make sure that the <strong>elicitor name</strong> matches the one you used for
+            <a href="https://fieldworkdrawl.linguistics.ubc.ca/register">registration</a>. If you forget this information or have any questions,
+            please reach out to Roger Lo at roger.lo[at]ubc.ca.
+        </div>
+        <br>
         <div class="text-center">
             <button type="submit" class="btn btn-primary">@lang('messages.DemoTitle')</button>
         </div>
