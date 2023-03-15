@@ -13,10 +13,17 @@ class ElicitationInfoController extends Controller
 
     public function generate_url(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'exists:users'
+        ],
+        [
+            'name.exists' => 'Username not found in the database. Please double-check or register first.'
+        ]);
+
         return view('generate_url',
             [
                 'elicitation_date' => $request['elicitation-date'],
-                'elicitor_name' => $request['elicitor-name'],
+                'elicitor_name' => $request['name'],
                 'consultant_name' => $request['consultant-name'],
                 'zoom_link' => $request['zoom-link']
             ]);
