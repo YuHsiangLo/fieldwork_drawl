@@ -26,7 +26,7 @@ return [
     "RecorderTestTitle" => "Test Recording",
     "RecorderToolTitle" => "Recording Tool",
     "RecorderInputLevelLabel" => "Input Level Meter",
-    "RecorderPlaybackSubmitLabel" => "Playback / Submit",
+    "RecorderPlaybackSubmitLabel" => "Playback",
     "RecorderReadingTitle" => "Reading Sample: Vancouver Dawn",
     "RecorderAdditionalReadingTitle" => "Spontaneous Speech Prompts",
     "RecorderActivateAudioTitle" => "Audio Activation",
