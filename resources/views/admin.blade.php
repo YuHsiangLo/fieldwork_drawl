@@ -79,7 +79,7 @@
                                         @if(strpos(strtolower(Auth::user()->name), strtolower($consent_form->elicitor)) !== false)
                                             <tr>
                                                 <td>
-                                                    {{$consent_form->id}}</td><td>{{$consent_form->elicitor}}</td><td>{{$consent_form->consultant}}</td><td>{{$consent_form->created_at}}</td><td>
+                                                    {{$consent_form->id}}</td><td>{{$consent_form->elicitor}}</td><td>{{$consent_form->consultant}}</td><td>{{$consent_form->local_time}}</td><td>
                                                     <audio controls preload="metadata" style="width:300px;">
                                                         <source src="{{ Storage::url('audio/' . $consent_form->date . '/' . $consent_form->recording_filename) }}" type="audio/wav">
                                                         Your browser does not support the audio element.

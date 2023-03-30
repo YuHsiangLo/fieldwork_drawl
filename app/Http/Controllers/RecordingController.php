@@ -16,12 +16,10 @@ class RecordingController extends Controller
 {
     public function create(Request $request)
     {
-        $date = $request->query('date');
         $elicitor = $request->query('elicitor');
         $consultant = $request->query('consultant');
         $zoom = $request->query('zoom');
 
-        $request->session()->put('record_date', $date);
         $request->session()->put('elicitor', $elicitor);
         $request->session()->put('consultant', $consultant);
         $request->session()->put('zoom', $zoom);
@@ -29,7 +27,6 @@ class RecordingController extends Controller
         return view('recorder_interface',
             [
                 'locale' => \App::getLocale(),
-                'date' => $date,
                 'elicitor' => $elicitor,
                 'consultant' => $consultant,
                 'zoom' => $zoom
@@ -184,20 +181,12 @@ class RecordingController extends Controller
         echo 'success';
 
         $testModel = FieldWorkRecording::create([
-            //'date' => $request->session()->get('record_date'),
-            'date' => rtrim($request['participant_folder'], '/'),
+            'date' => $request['date'],
+            'local_time' => $request['local_time'],
             'elicitor' => $request->session()->get('elicitor'),
             'consultant' => $request->session()->get('consultant'),
             'recording_filename' => $request['audio-filename']
         ]);
-
-        //$testModel = Recording::create([
-        //    'date' => $request->session()->get('record_date'),
-        //    'elicitor' => $request->session()->get('elicitor'),
-        //    'consultant' => $request->session()->get('consultant'),
-        //    'recording_filename' => 'a'//$fileName
-        //]);
-
     }
 
     // delete the recording

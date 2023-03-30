@@ -149,9 +149,7 @@
 
 @section('after-body')
     <script>
-        const user_id = '{{$date}}' + '_' + '{{$consultant}}' + '_' + '{{$elicitor}}';
         const consultant = '{{$consultant}}';
-        const date = '{{$date}}';
         const h1 = document.getElementById('rectime');
         const start = document.getElementById('recordButton');
         const reminder_audio = document.getElementById('reminder-audio');

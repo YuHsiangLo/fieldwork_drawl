@@ -11,6 +11,7 @@ class FieldWorkRecording extends Model
 
     public $fillable = [
         'date',
+        'local_time',
         'elicitor',
         'consultant',
         'recording_filename'

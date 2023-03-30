@@ -22,7 +22,6 @@ class ElicitationInfoController extends Controller
 
         return view('generate_url',
             [
-                'elicitation_date' => $request['elicitation-date'],
                 'elicitor_name' => $request['name'],
                 'consultant_name' => $request['consultant-name'],
                 'zoom_link' => $request['zoom-link']

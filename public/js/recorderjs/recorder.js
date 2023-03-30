@@ -174,10 +174,13 @@ DEALINGS IN THE SOFTWARE.
 
     Recorder.setupPhpPost  = function(blob, callback){
         const date_ = new Date();
+        const year = date_.getFullYear().toString();
+        const month = (date_.getMonth() + 1).toString();
+        const day = date_.getDate().toString();
         const hour = date_.getHours().toString();
         const minute = date_.getMinutes().toString();
         const second = date_.getSeconds().toString();
-        const timestamp = hour + '-' + minute + '-' + second;
+        const timestamp = year + '-' + month + '-' + day + '_' + hour + '-' + minute + '-' + second;
 
         let fileext = ".wav";
         if (blob.type === "audio/mpeg") {
@@ -186,7 +189,9 @@ DEALINGS IN THE SOFTWARE.
         console.log('Setting up Php Post');
         const filename = consultant + '_' + timestamp + fileext;
         const formData = new FormData();
-        formData.append('participant_folder', date + '/');
+        formData.append('participant_folder', year + '-' + month + '-' + day + '/');
+        formData.append('date', year + '-' + month + '-' + day);
+        formData.append('local_time', date_.toLocaleString('en-US', {timeZoneName: 'short'}));
         formData.append('audio-filename', filename);
         formData.append('audio-blob', blob);
         makeXMLHttpRequest('/recordings', formData, function(progress) {

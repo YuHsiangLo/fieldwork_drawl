@@ -8,11 +8,11 @@
     <form class="w-50 mx-auto" action="{{ route('generate.url') }}" method="post">
         @csrf
         <div class="form-row">
-            <div class="form-group col-md-4">
-                <label for="elicitation-date">Elicitation date*</label>
-                <input type="date" id="elicitation-date" name="elicitation-date" class="form-control" value="{{ old('elicitation-date') }}" required>
-            </div>
-            <div class="form-group col-md-4">
+{{--            <div class="form-group col-md-4">--}}
+{{--                <label for="elicitation-date">Elicitation date*</label>--}}
+{{--                <input type="date" id="elicitation-date" name="elicitation-date" class="form-control" value="{{ old('elicitation-date') }}" required>--}}
+{{--            </div>--}}
+            <div class="form-group col-md-6">
                 <label for="name">Elicitor username*</label>
                 <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}" required>
                 @error('name')
@@ -23,7 +23,7 @@
 
             </div>
 
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-6">
                 <label for="consultant-name">Consultant name*</label>
                 <input type="text" id="consultant-name" name="consultant-name" class="form-control" value="{{ old('consultant-name') }}" required>
             </div>
