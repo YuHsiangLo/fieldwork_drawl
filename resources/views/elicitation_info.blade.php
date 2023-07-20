@@ -34,9 +34,14 @@
         </div>
         <br>
         <div class="text-info text-center">
-            Note that all fields are required, and please make sure that the <strong>elicitor username</strong> matches the one you used for
-            <a href="https://fieldworkdrawl.linguistics.ubc.ca/register">registration</a>. If you forget this information or have any questions,
-            please reach out to Roger Lo at roger.lo[at]ubc.ca.
+            <div>
+                Detailed instructions: <a href="https://blogs.ubc.ca/fieldworkdrawl/">https://blogs.ubc.ca/fieldworkdrawl/</a>
+            </div>
+            <div>
+                Note that all fields are required, and please make sure that the <strong>elicitor username</strong> matches the one you used for
+                <a href="https://fieldworkdrawl.linguistics.ubc.ca/register">registration</a>. If you forget this information or have any questions,
+                please reach out to Roger Lo at roger.lo[at]ubc.ca.
+            </div>
         </div>
         <br>
         <div class="text-center">
