@@ -27,7 +27,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::define('manage-users', function ($user) {
-            return $user->authorized
+            return ($user->authorized && $user->name === 'ylo')
                   ? Response::allow()
                   : Response::deny('You must be authorized to manage users.');
         });
