@@ -147,17 +147,22 @@ function startSubmit() {
     }
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function continueRecording(element) {
     if (element.classList.contains('r1')) {
         element.classList.remove('r1');
         element.classList.add('r2');
 
-        audioRecorder1.stop();
         audioRecorder2.clear();
         audioRecorder2.record();
+        sleep(60000)
+        audioRecorder1.stop();
 
-	// have a timeout here is start recorder 2 before recorder 1 ends
-	// join audio files post-hoc
+	    // have a timeout here to start recorder 2 before recorder 1 ends
+	    // join audio files post-hoc
 
         audioRecorder1.getBuffers(buffer => gotBuffers(buffer, audioRecorder1));
 
@@ -165,9 +170,10 @@ function continueRecording(element) {
         element.classList.remove('r2');
         element.classList.add('r3');
 
-        audioRecorder2.stop();
         audioRecorder3.clear();
         audioRecorder3.record();
+        sleep(60000)
+        audioRecorder2.stop();
 
         audioRecorder2.getBuffers(buffer => gotBuffers(buffer, audioRecorder2));
 
@@ -175,9 +181,10 @@ function continueRecording(element) {
         element.classList.remove('r3');
         element.classList.add('r4');
 
-        audioRecorder3.stop();
         audioRecorder4.clear();
         audioRecorder4.record();
+        sleep(60000)
+        audioRecorder3.stop();
 
         audioRecorder3.getBuffers(buffer => gotBuffers(buffer, audioRecorder3));
 
@@ -185,9 +192,10 @@ function continueRecording(element) {
         element.classList.remove('r4');
         element.classList.add('r5');
 
-        audioRecorder4.stop();
         audioRecorder5.clear();
         audioRecorder5.record();
+        sleep(60000)
+        audioRecorder4.stop();
 
         audioRecorder4.getBuffers(buffer => gotBuffers(buffer, audioRecorder4));
 
@@ -195,9 +203,10 @@ function continueRecording(element) {
         element.classList.remove('r5');
         element.classList.add('r1');
 
-        audioRecorder5.stop();
         audioRecorder1.clear();
         audioRecorder1.record();
+        sleep(60000)
+        audioRecorder5.stop();
 
         audioRecorder5.getBuffers(buffer => gotBuffers(buffer, audioRecorder5));
     }
