@@ -76,7 +76,7 @@
                                 <table style="width:100%">
                                     <tr><th>ID</th><th>Elicitor</th><th>Consultant</th><th>Date</th><th>Player</th><th>Actions</th></tr>
                                     @foreach ($consent_forms as $consent_form)
-                                        @if(strpos(strtolower(Auth::user()->name), strtolower($consent_form->elicitor)) !== false || in_array(strtolower(Auth::user()->name), ['ylo', 'mdschwan', 'mollybabel']))
+                                        @if(strtolower(Auth::user()->name) === strtolower($consent_form->elicitor) || in_array(strtolower(Auth::user()->name), ['ylo', 'mdschwan', 'mollybabel']))
                                             <tr>
                                                 <td>
                                                     {{$consent_form->id}}</td><td>{{$consent_form->elicitor}}</td><td>{{$consent_form->consultant}}</td><td>{{$consent_form->local_time}}</td><td>

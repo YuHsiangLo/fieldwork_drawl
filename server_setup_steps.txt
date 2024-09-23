@@ -1,8 +1,9 @@
 1. cd /etc/httpd/conf.d/
-2. put fieldworkdrawl.linguistics.ubc.ca.ssl.conf there
+2. put fieldworkdrawl.linguistics.ubc.ca.ssl.conf there (need to make sure this alphabet of the name comes before ssl.conf) -> check with apachectl -S
 3. put redirect-http-to-https.conf there
 4. run systemctl restart httpd
 5. might need to add wildcard certificates (ssl.chain, ssl.key, ssl.crt) in the relevant folders in the *conf* folder.
+6. increase php.ini (in /etc) to post_max_size = 1000M, upload_max_filesize = 1000M
 
 1. git clone repo
 2. edit .env file from .env.example -> change name and URL
@@ -13,3 +14,4 @@
 7. create database.sqlite in database folder
 8. run php artisan migrate
 9. change the group:user to apache: sudo chown -R apache:apache fieldwork_drawl/
+
