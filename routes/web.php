@@ -26,6 +26,16 @@ Route::get('/record/create','RecordingController@create')->name('record.create')
 //Route::post('/demographic_questionnaires','DemographicQuestionnaireController@store')->name('demographic_questionnaires.store');
 //Route::get('/recordings/create','RecordingController@create')->name('recordings.create');
 Route::post('/recordings','RecordingController@store')->name('recordings.store');
+Route::get('send-mail', function () {
+    $details = [
+        'title' => 'Mail from ItSolutionStuff.com',
+        'body' => 'This is for testing email using smtp'
+    ];
+
+    \Mail::to('b13472003@gmail.com')->send(new \App\Mail\MyTestMail($details));
+
+    dd("Email is Sent.");
+});
 
 
 Auth::routes();
