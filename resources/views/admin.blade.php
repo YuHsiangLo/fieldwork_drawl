@@ -72,7 +72,7 @@
                     <div class="card">
                         <div class="card-header">Submissions</div>
                         <div class="card-body">
-                            @if (collect($consent_forms)->map(function ($item, $key) {return strpos(strtolower(Auth::user()->name), strtolower($item->elicitor)) !== false;})->reduce(function ($carry, $item) {return $carry + $item;}) > 0)
+                            @if (collect($consent_forms)->map(function ($item, $key) {return strtolower(Auth::user()->name) === strtolower($item->elicitor);})->reduce(function ($carry, $item) {return $carry + $item;}) > 0)
                                 <table style="width:100%">
                                     <tr><th>ID</th><th>Elicitor</th><th>Consultant</th><th>Date</th><th>Player</th><th>Actions</th></tr>
                                     @foreach ($consent_forms as $consent_form)
