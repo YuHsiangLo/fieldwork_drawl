@@ -34,6 +34,10 @@ return [
     */
 
     'mailers' => [
+        'sparkpost' => [
+            'transport' => 'sparkpost'
+        ],
+
         'smtp' => [
             'transport' => 'smtp',
             'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
